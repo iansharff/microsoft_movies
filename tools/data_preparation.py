@@ -40,3 +40,21 @@ def display_percent_nan(df):
     series = percent_nan(df)
     for column in series.index:
         print(f"{column}: {100 * series.at[column]:.2f} % null")
+
+
+def clean_rt_reviews(path):
+    """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
+    # Initialize pd.DataFrame object
+    reviews_df = pd.read_csv(path, delimiter='\t', encoding='latin-1')
+
+    # Drop duplicates and unnecessary columns
+    reviews_df.drop_duplicates(inplace=True)
+    reviews_df.drop(['rating', 'publisher', 'critic'], axis=1, inplace=True)
+
+    # Cast dates as pd.datetime objects
+    reviews_df['date'] = pd.to_datetime(reviews_df['date'])
+
+    # Change 'fresh' column to 1 if fresh, 0 if rotten
+    reviews_df['fresh'] = reviews_df['fresh'].map({'rotten': 0, 'fresh': 1})
+
+    return reviews_df
