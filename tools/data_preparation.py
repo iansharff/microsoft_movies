@@ -42,7 +42,13 @@ def display_percent_nan(df):
         print(f"{column}: {100 * series.at[column]:.2f} % null")
 
 
-def clean_rt_reviews(path, na_action=None):
+def minutes_to_int(val):
+    """Cast runtime minutes string as integer"""
+    if isinstance(val, str):
+        return int(val.replace('minutes', '').strip())
+
+
+def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None, subset=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
     # Initialize pd.DataFrame object
     reviews_df = pd.read_csv(path, delimiter='\t', encoding='latin-1')
@@ -67,3 +73,33 @@ def clean_rt_reviews(path, na_action=None):
             reviews_df['review'].fillna('Empty', inplace=True)
 
     return reviews_df
+
+
+def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
+    """Clean Rotten Tomatoes movie info dataset"""
+    # Initialize info_df DataFrame object
+    info_df = pd.read_csv(path, delimiter='\t')
+
+    # Drop duplicates if they exist
+    if info_df.duplicated().sum():
+        info_df.drop_duplicates(inplace=True)
+
+    # Drop unnecessary columns
+    info_df.drop(['director', 'writer', 'currency', 'box_office', 'studio'], axis=1, inplace=True)
+
+    # Fill NaN 'genre' values and create tuples of genre categories for each movie
+    info_df['genre'].fillna('Not listed', inplace=True)
+    info_df['genre'] = info_df['genre'].map(lambda x: tuple(x.split('|')))
+
+    # Change date strings to pd.datetime objects
+    date_cols = ['theater_date', 'dvd_date']
+    info_df[date_cols] = info_df[date_cols].apply(pd.to_datetime, axis=1)
+
+    # Format 'runtime' column and cast as integer
+    info_df['runtime'] = info_df['runtime'].map(minutes_to_int, na_action='ignore')
+
+    # Drop rows with NaN values in subset columns
+    if dropna:
+        info_df.dropna(subset=subset, inplace=True)
+
+    return info_df
