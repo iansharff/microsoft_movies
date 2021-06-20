@@ -27,9 +27,16 @@ IMDB_TITLE_RATINGS = "../data/imdb.title.ratings.csv"
 TMDB_MOVIES = "../data/tmdb.movies.csv"
 TN_BUDGETS = "../data/tn.movie_budgets.csv"
 
+
 def percent_nan(df):
     """Return a Series of percent NaN values in each column of a DataFrame"""
     nulls = df.isnull().sum()
     length = len(df.index)
     return nulls / length if length != 0 else None
 
+
+def display_percent_nan(df):
+    """Display formatted percent-NaN-values for each column of a DataFrame"""
+    series = percent_nan(df)
+    for column in series.index:
+        print(f"{column}: {100 * series.at[column]:.2f} % null")
