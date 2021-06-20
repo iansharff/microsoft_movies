@@ -42,7 +42,7 @@ def display_percent_nan(df):
         print(f"{column}: {100 * series.at[column]:.2f} % null")
 
 
-def clean_rt_reviews(path):
+def clean_rt_reviews(path, na_action=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
     # Initialize pd.DataFrame object
     reviews_df = pd.read_csv(path, delimiter='\t', encoding='latin-1')
@@ -56,5 +56,14 @@ def clean_rt_reviews(path):
 
     # Change 'fresh' column to 1 if fresh, 0 if rotten
     reviews_df['fresh'] = reviews_df['fresh'].map({'rotten': 0, 'fresh': 1})
+
+    if na_action:
+        # Fill NaN values in 'review' column with 'Empty', if specified
+        if na_action == 'drop':
+            reviews_df.dropna(subset=['review'], inplace=True)
+
+        # Drop rows with NaN 'review' values, if specified
+        if na_action == 'fill':
+            reviews_df['review'].fillna('Empty', inplace=True)
 
     return reviews_df
