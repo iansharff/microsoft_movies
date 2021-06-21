@@ -28,6 +28,11 @@ TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
 
+#
+# MISCELLANEOUS HELPER FUNCTIONS
+#
+
+
 def percent_nan(df):
     """Return a Series of percent NaN values in each column of a DataFrame"""
     nulls = df.isnull().sum()
@@ -42,13 +47,23 @@ def display_percent_nan(df):
         print(f"{column}: {100 * series.at[column]:.2f} % null")
 
 
-def minutes_to_int(val):
-    """Cast runtime minutes string as integer"""
+def minutes_to_num(val):
+    """Cast runtime minutes string as a numeric value"""
     if isinstance(val, str):
-        return int(val.replace('minutes', '').strip())
+        return eval(val.replace('minutes', '').strip())
 
 
-def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None, subset=None):
+def dollars_to_num(val):
+    """Cast formatted dollar amount string as a numeric value"""
+    if isinstance(val, str):
+        return eval(val.replace('$', '').replace(',', ''))
+
+
+#
+# ROTTEN TOMATOES CLEANING AND MERGING FUNCTIONS
+#
+
+def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
     # Initialize pd.DataFrame object
     reviews_df = pd.read_csv(path, delimiter='\t', encoding='latin-1')
@@ -96,7 +111,7 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     info_df[date_cols] = info_df[date_cols].apply(pd.to_datetime, axis=1)
 
     # Format 'runtime' column and cast as integer
-    info_df['runtime'] = info_df['runtime'].map(minutes_to_int, na_action='ignore')
+    info_df['runtime'] = info_df['runtime'].map(minutes_to_num, na_action='ignore')
 
     # Drop rows with NaN values in subset columns
     if dropna:
@@ -113,3 +128,92 @@ def merge_rt_data():
     merged = info_df.merge(reviews_df, on='id')
 
     return merged
+
+
+#
+# TN MOVIE BUDGET CLEANING FUNCTIONS
+#
+
+
+def clean_tn_budgets():
+    """Return a clean DataFrame from The Numbers information on budget"""
+    # Initialize DataFrame
+    tn_df = pd.read_csv(TN_BUDGETS)
+
+    # Cast date strings as pd.datetime objects
+    tn_df['release_date'] = pd.to_datetime(tn_df['release_date'])
+
+    # Cast dollar amount strings as integer amounts
+    dollar_cols = ['production_budget', 'domestic_gross', 'worldwide_gross']
+    for col in dollar_cols:
+        tn_df[col] = tn_df[col].map(dollars_to_num)
+
+    return tn_df
+
+
+#
+# BOX OFFICE MOJO CLEANING FUNCTIONS
+#
+
+
+def clean_bom_gross():
+    """Return a clean DataFrame from Box Office Mojo dataset"""
+    # Initialize DataFrame
+    bom_df = pd.read_csv(BOM_GROSS)
+
+    # Cast foreign_gross column as integers
+    bom_df['foreign_gross'] = (bom_df['foreign_gross'].map(dollars_to_num, na_action='ignore'))
+
+    return bom_df
+
+
+#
+# TMDB CLEANING FUNCTIONS
+#
+
+
+def clean_tmdb_movies():
+    tmdb_movies_df = pd.read_csv(TMDB_MOVIES)
+
+    return tmdb_movies_df
+
+
+#
+# IMDB CLEANING FUNCTIONS
+#
+
+
+def clean_imdb_name_basics():
+    imdb_name_basics_df = pd.read_csv(IMDB_NAME_BASICS)
+
+    return imdb_name_basics_df
+
+
+def clean_imdb_title_akas():
+    imdb_title_akas_df = pd.read_csv(IMDB_TITLE_AKAS)
+
+    return imdb_title_akas_df
+
+
+def clean_imdb_title_basics():
+    imdb_title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
+
+    return imdb_title_basics_df
+
+
+def clean_imdb_title_crew():
+    imdb_title_crew_df = pd.read_csv(IMDB_TITLE_CREW)
+
+    return imdb_title_crew_df
+
+
+def clean_imdb_title_principals():
+    imdb_title_principals_df = pd.read_csv(IMDB_TITLE_PRINCIPALS)
+
+    return imdb_title_principals_df
+
+
+def clean_imdb_title_ratings():
+    imdb_title_ratings_df = pd.read_csv(IMDB_TITLE_RATINGS)
+
+    return imdb_title_ratings_df
