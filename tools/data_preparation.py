@@ -27,6 +27,10 @@ IMDB_TITLE_RATINGS = "./data/imdb.title.ratings.csv"
 TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
+#
+# MISCELLANEOUS HELPER FUNCTIONS
+#
+
 
 def percent_nan(df):
     """Return a Series of percent NaN values in each column of a DataFrame"""
@@ -50,9 +54,13 @@ def minutes_to_int(val):
 
 def dollars_to_int(val):
     """Cast formatted dollar amount string as integer"""
-    if isinstance(val, str):
+    if isinstance(val, str) and val.startswith("$"):
         return int(val.replace('$', '').replace(',', ''))
 
+
+#
+# ROTTEN TOMATOES CLEANING AND MERGING FUNCTIONS
+#
 
 def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None, subset=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
@@ -119,3 +127,24 @@ def merge_rt_data():
     merged = info_df.merge(reviews_df, on='id')
 
     return merged
+
+
+#
+# TN MOVIE BUDGET CLEANING FUNCTIONS
+#
+
+
+def clean_tn_budgets():
+    """Return a clean DataFrame from The Numbers information on budget"""
+    # Initialize DataFrame
+    tn_df = pd.read_csv(TN_BUDGETS)
+
+    # Cast date strings as pd.datetime objects
+    tn_df['release_date'] = pd.to_datetime(tn_df['release_date'])
+
+    # Cast dollar amount strings as integer amounts
+    dollar_cols = ['production_budget', 'domestic_gross', 'worldwide_gross']
+    for col in dollar_cols:
+        tn_df[col] = tn_df[col].map(dollars_to_int)
+
+    return tn_df
