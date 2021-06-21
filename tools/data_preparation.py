@@ -27,6 +27,7 @@ IMDB_TITLE_RATINGS = "./data/imdb.title.ratings.csv"
 TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
+
 #
 # MISCELLANEOUS HELPER FUNCTIONS
 #
@@ -46,16 +47,16 @@ def display_percent_nan(df):
         print(f"{column}: {100 * series.at[column]:.2f} % null")
 
 
-def minutes_to_int(val):
-    """Cast runtime minutes string as integer"""
+def minutes_to_num(val):
+    """Cast runtime minutes string as a numeric value"""
     if isinstance(val, str):
-        return int(val.replace('minutes', '').strip())
+        return eval(val.replace('minutes', '').strip())
 
 
-def dollars_to_int(val):
-    """Cast formatted dollar amount string as integer"""
-    if isinstance(val, str) and val.startswith("$"):
-        return int(val.replace('$', '').replace(',', ''))
+def dollars_to_num(val):
+    """Cast formatted dollar amount string as a numeric value"""
+    if isinstance(val, str):
+        return eval(val.replace('$', '').replace(',', ''))
 
 
 #
@@ -110,7 +111,7 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     info_df[date_cols] = info_df[date_cols].apply(pd.to_datetime, axis=1)
 
     # Format 'runtime' column and cast as integer
-    info_df['runtime'] = info_df['runtime'].map(minutes_to_int, na_action='ignore')
+    info_df['runtime'] = info_df['runtime'].map(minutes_to_num, na_action='ignore')
 
     # Drop rows with NaN values in subset columns
     if dropna:
@@ -145,6 +146,22 @@ def clean_tn_budgets():
     # Cast dollar amount strings as integer amounts
     dollar_cols = ['production_budget', 'domestic_gross', 'worldwide_gross']
     for col in dollar_cols:
-        tn_df[col] = tn_df[col].map(dollars_to_int)
+        tn_df[col] = tn_df[col].map(dollars_to_num)
 
     return tn_df
+
+
+#
+# BOX OFFICE MOJO CLEANING FUNCTIONS
+#
+
+
+def clean_bom_gross():
+    """Return a clean DataFrame from Box Office Mojo dataset"""
+    # Initialize DataFrame
+    bom_df = pd.read_csv(BOM_GROSS)
+
+    # Cast foreign_gross column as integers
+    bom_df['foreign_gross'] = (bom_df['foreign_gross'].map(dollars_to_num, na_action='ignore'))
+
+    return bom_df
