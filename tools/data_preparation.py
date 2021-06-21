@@ -48,6 +48,12 @@ def minutes_to_int(val):
         return int(val.replace('minutes', '').strip())
 
 
+def dollars_to_int(val):
+    """Cast formatted dollar amount string as integer"""
+    if isinstance(val, str):
+        return int(val.replace('$', '').replace(',', ''))
+
+
 def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None, subset=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
     # Initialize pd.DataFrame object
