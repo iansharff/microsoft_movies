@@ -103,3 +103,13 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
         info_df.dropna(subset=subset, inplace=True)
 
     return info_df
+
+
+def merge_rt_data():
+    # Initialize DataFrames
+    reviews_df = clean_rt_reviews()
+    info_df = clean_rt_movie_info()
+
+    merged = info_df.merge(reviews_df, on='id')
+
+    return merged
