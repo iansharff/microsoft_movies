@@ -63,7 +63,7 @@ def dollars_to_num(val):
 # ROTTEN TOMATOES CLEANING AND MERGING FUNCTIONS
 #
 
-def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None, subset=None):
+def clean_rt_reviews(path=RT_REVIEWS_PATH, na_action=None):
     """Drop duplicate reviews, drop 'rating', 'publisher', and 'critic' columns, and cast to useful data types"""
     # Initialize pd.DataFrame object
     reviews_df = pd.read_csv(path, delimiter='\t', encoding='latin-1')
@@ -165,3 +165,55 @@ def clean_bom_gross():
     bom_df['foreign_gross'] = (bom_df['foreign_gross'].map(dollars_to_num, na_action='ignore'))
 
     return bom_df
+
+
+#
+# TMDB CLEANING FUNCTIONS
+#
+
+
+def clean_tmdb_movies():
+    tmdb_movies_df = pd.read_csv(TMDB_MOVIES)
+
+    return tmdb_movies_df
+
+
+#
+# IMDB CLEANING FUNCTIONS
+#
+
+
+def clean_imdb_name_basics():
+    imdb_name_basics_df = pd.read_csv(IMDB_NAME_BASICS)
+
+    return imdb_name_basics_df
+
+
+def clean_imdb_title_akas():
+    imdb_title_akas_df = pd.read_csv(IMDB_TITLE_AKAS)
+
+    return imdb_title_akas_df
+
+
+def clean_imdb_title_basics():
+    imdb_title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
+
+    return imdb_title_basics_df
+
+
+def clean_imdb_title_crew():
+    imdb_title_crew_df = pd.read_csv(IMDB_TITLE_CREW)
+
+    return imdb_title_crew_df
+
+
+def clean_imdb_title_principals():
+    imdb_title_principals_df = pd.read_csv(IMDB_TITLE_PRINCIPALS)
+
+    return imdb_title_principals_df
+
+
+def clean_imdb_title_ratings():
+    imdb_title_ratings_df = pd.read_csv(IMDB_TITLE_RATINGS)
+
+    return imdb_title_ratings_df
