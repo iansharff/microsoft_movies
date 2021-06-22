@@ -3,6 +3,7 @@ This module is to be used for data cleaning and preparation.
 """
 import ast
 import json
+import string
 import pandas as pd
 import numpy as np
 
@@ -29,6 +30,7 @@ TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
 TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
+
 
 #
 # MISCELLANEOUS HELPER FUNCTIONS
@@ -59,6 +61,13 @@ def dollars_to_num(val):
     """Cast formatted dollar amount string as a numeric value"""
     if isinstance(val, str):
         return eval(val.replace('$', '').replace(',', ''))
+
+
+def remove_punctuation(text):
+    """Remove punctuation from a string"""
+    for char in string.punctuation:
+        text = text.replace(char, '')
+    return text.replace(' ', '').lower().strip()
 
 
 #
@@ -237,9 +246,13 @@ def clean_imdb_title_akas():
 
 
 def clean_imdb_title_basics():
-    imdb_title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
+    # Initialize DataFrame
+    title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
 
-    return imdb_title_basics_df
+    # Remove punctuation and spaces from title names and make new column, 'cleaned_title'
+    title_basics_df['cleaned_title'] = title_basics_df['primary_title'].map(remove_punctuation)
+
+    return title_basics_df
 
 
 def clean_imdb_title_crew():
