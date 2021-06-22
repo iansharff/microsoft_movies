@@ -113,21 +113,48 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     # Format 'runtime' column and cast as integer
     info_df['runtime'] = info_df['runtime'].map(minutes_to_num, na_action='ignore')
 
-    # Drop rows with NaN values in subset columns
+    # Drop rows with NaN values in subset columns. If not specified, then all columns considered
     if dropna:
         info_df.dropna(subset=subset, inplace=True)
 
     return info_df
 
 
-def merge_rt_data():
+def merge_rt_data(focus=None):
+    """Return inner-joined DataFrame, or a feature-engineered subset of it with the focus parameter"""
     # Initialize DataFrames
     reviews_df = clean_rt_reviews()
     info_df = clean_rt_movie_info()
 
-    merged = info_df.merge(reviews_df, on='id')
+    # Initialize merged DataFrame
+    rt_df = info_df.merge(reviews_df, on='id')
 
-    return merged
+    # If genre_popularity is passed, then subset with 'genre' and 'fresh' columns, then explode on 'genre'
+    if focus == 'genre_popularity':
+        exploded = rt_df[['genre', 'fresh']].explode('genre', ignore_index=True)
+
+        # Group by genre and aggregate 'fresh' with 'count', 'sum' and 'mean'
+        grouped = exploded.groupby('genre')['fresh'].aggregate(['count', 'sum', 'mean'])
+
+        # Rename columns: count -> 'total_references', sum -> 'total_positive', mean -> 'percent_positive'
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+
+        # Sort values by quantity of positive reviews
+        rt_df = grouped.sort_values('total_positive', ascending=False)
+
+    # Handle similarly for rating popularity
+    elif focus == 'rating_popularity':
+        grouped = rt_df[['rating', 'fresh']].groupby('rating')['fresh'].aggregate(['count', 'sum', 'mean'])
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+
+        rt_df = grouped.sort_values('total_positive', ascending=False)
+
+    # Return unmodified DataFrame if 'focus' parameter is not passed
+    return rt_df
 
 
 #
