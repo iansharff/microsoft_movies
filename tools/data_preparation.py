@@ -67,7 +67,7 @@ def remove_punctuation(text):
     """Remove punctuation from a string"""
     for char in string.punctuation:
         text = text.replace(char, '')
-    return text.replace(' ', '').lower().strip()
+    return text.strip().lower().replace(' ', '')
 
 
 #
@@ -202,7 +202,59 @@ def clean_bom_gross():
     # Cast foreign_gross column as integers
     bom_df['foreign_gross'] = (bom_df['foreign_gross'].map(dollars_to_num, na_action='ignore'))
 
+    # Fill NaN values
+    bom_df['foreign_gross'].fillna(0, inplace=True)
+    bom_df['domestic_gross'].fillna(0, inplace=True)
+
+    # Remove punctuation and spaces from title names and make new column, 'cleaned_title'
+    bom_df['cleaned_title'] = bom_df['title'].map(remove_punctuation)
+
     return bom_df
+
+
+def merge_bom_and_imdb():
+    """Merge the Box Office Mojo and IMDB title ratings and basics DataFrames"""
+    # Initialize DataFrames
+    bom_df = clean_bom_gross()
+    basics_df = clean_imdb_title_basics()
+    ratings_df = clean_imdb_title_ratings()
+
+    # Perform first merge
+    bom_titles_df = pd.merge(basics_df, bom_df, how='inner', on='cleaned_title')
+
+    # Explode DataFrame on 'genres' column
+    bom_titles_df['genres'] = bom_titles_df['genres'].str.strip().str.split(',')
+    exploded = bom_titles_df.explode('genres')
+
+    # Merge with ratings DataFrame
+    combined = pd.merge(exploded, ratings_df, how='inner', on='tconst')
+
+    # Subset and add 'avgrating_x_numvotes', 'total_gross' columns
+    eval_exp1 = '''
+    avgrating_x_numvotes = averagerating * numvotes
+    total_gross = domestic_gross + foreign_gross
+    '''
+    subset = combined[['genres', 'numvotes', 'averagerating', 'domestic_gross', 'foreign_gross']].eval(eval_exp1)
+
+    # Create columns of interest with named aggregation
+    final_df = subset.groupby('genres').aggregate(numvotes=pd.NamedAgg('numvotes', 'sum'),
+                                                  avgrating_x_numvotes=pd.NamedAgg('avgrating_x_numvotes', 'sum'),
+                                                  avgnumvotes=pd.NamedAgg('numvotes', 'mean'),
+                                                  domestic_gross=pd.NamedAgg('domestic_gross', 'mean'),
+                                                  foreign_gross=pd.NamedAgg('foreign_gross', 'mean'),
+                                                  total_gross=pd.NamedAgg('total_gross', 'mean'))
+
+    # Add more columns for weighted average and scaled gross for plotting
+    eval_exp2 = '''
+    wavg_rating = avgrating_x_numvotes / numvotes
+    total_gross_scaled = total_gross / 10 ** 5
+    '''
+    final_df.eval(eval_exp2, inplace=True)
+
+    # Reset the index for easier control over plotting
+    final_df.reset_index(inplace=True)
+
+    return final_df
 
 
 #
@@ -248,6 +300,9 @@ def clean_imdb_title_akas():
 def clean_imdb_title_basics():
     # Initialize DataFrame
     title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
+
+    # Drop rows without genres
+    title_basics_df.dropna(subset=['genres'], inplace=True)
 
     # Remove punctuation and spaces from title names and make new column, 'cleaned_title'
     title_basics_df['cleaned_title'] = title_basics_df['primary_title'].map(remove_punctuation)
