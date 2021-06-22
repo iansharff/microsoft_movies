@@ -1,7 +1,8 @@
 """
 This module is to be used for data cleaning and preparation.
 """
-
+import ast
+import json
 import pandas as pd
 import numpy as np
 
@@ -27,6 +28,7 @@ IMDB_TITLE_RATINGS = "./data/imdb.title.ratings.csv"
 TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
+TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
 
 #
 # MISCELLANEOUS HELPER FUNCTIONS
@@ -113,21 +115,48 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     # Format 'runtime' column and cast as integer
     info_df['runtime'] = info_df['runtime'].map(minutes_to_num, na_action='ignore')
 
-    # Drop rows with NaN values in subset columns
+    # Drop rows with NaN values in subset columns. If not specified, then all columns considered
     if dropna:
         info_df.dropna(subset=subset, inplace=True)
 
     return info_df
 
 
-def merge_rt_data():
+def merge_rt_data(focus=None):
+    """Return inner-joined DataFrame, or a feature-engineered subset of it with the focus parameter"""
     # Initialize DataFrames
     reviews_df = clean_rt_reviews()
     info_df = clean_rt_movie_info()
 
-    merged = info_df.merge(reviews_df, on='id')
+    # Initialize merged DataFrame
+    rt_df = info_df.merge(reviews_df, on='id')
 
-    return merged
+    # If genre_popularity is passed, then subset with 'genre' and 'fresh' columns, then explode on 'genre'
+    if focus == 'genre_popularity':
+        exploded = rt_df[['genre', 'fresh']].explode('genre', ignore_index=True)
+
+        # Group by genre and aggregate 'fresh' with 'count', 'sum' and 'mean'
+        grouped = exploded.groupby('genre')['fresh'].aggregate(['count', 'sum', 'mean'])
+
+        # Rename columns: count -> 'total_references', sum -> 'total_positive', mean -> 'percent_positive'
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+
+        # Sort values by quantity of positive reviews
+        rt_df = grouped.sort_values('total_positive', ascending=False)
+
+    # Handle similarly for rating popularity
+    elif focus == 'rating_popularity':
+        grouped = rt_df[['rating', 'fresh']].groupby('rating')['fresh'].aggregate(['count', 'sum', 'mean'])
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+
+        rt_df = grouped.sort_values('total_positive', ascending=False)
+
+    # Return unmodified DataFrame if 'focus' parameter is not passed
+    return rt_df
 
 
 #
@@ -172,10 +201,22 @@ def clean_bom_gross():
 #
 
 
+def tmdb_genre_dict():
+    with open(TMDB_GENRE_IDS) as f:
+        return {int(i): genre for i, genre in json.load(f).items()}
+
+
 def clean_tmdb_movies():
     tmdb_movies_df = pd.read_csv(TMDB_MOVIES)
+    tmdb_movies_df.drop('Unnamed: 0', axis=1, inplace=True)
+    # tmdb_movies_df = tmdb_movies_df.loc[tmdb_movies_df['genre_ids'] != '[]']
+    tmdb_movies_df['genre_ids'] = tmdb_movies_df['genre_ids'].map(ast.literal_eval)
 
-    return tmdb_movies_df
+    genre_dict = tmdb_genre_dict()
+    exploded = tmdb_movies_df.explode('genre_ids')
+    exploded['genre_ids'] = exploded['genre_ids'].map(genre_dict)
+
+    return exploded
 
 
 #
