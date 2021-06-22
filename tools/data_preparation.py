@@ -1,7 +1,8 @@
 """
 This module is to be used for data cleaning and preparation.
 """
-
+import ast
+import json
 import pandas as pd
 import numpy as np
 
@@ -27,6 +28,7 @@ IMDB_TITLE_RATINGS = "./data/imdb.title.ratings.csv"
 TMDB_MOVIES = "./data/tmdb.movies.csv"
 TN_BUDGETS = "./data/tn.movie_budgets.csv"
 
+TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
 
 #
 # MISCELLANEOUS HELPER FUNCTIONS
@@ -199,10 +201,22 @@ def clean_bom_gross():
 #
 
 
+def tmdb_genre_dict():
+    with open(TMDB_GENRE_IDS) as f:
+        return {int(i): genre for i, genre in json.load(f).items()}
+
+
 def clean_tmdb_movies():
     tmdb_movies_df = pd.read_csv(TMDB_MOVIES)
+    tmdb_movies_df.drop('Unnamed: 0', axis=1, inplace=True)
+    # tmdb_movies_df = tmdb_movies_df.loc[tmdb_movies_df['genre_ids'] != '[]']
+    tmdb_movies_df['genre_ids'] = tmdb_movies_df['genre_ids'].map(ast.literal_eval)
 
-    return tmdb_movies_df
+    genre_dict = tmdb_genre_dict()
+    exploded = tmdb_movies_df.explode('genre_ids')
+    exploded['genre_ids'] = exploded['genre_ids'].map(genre_dict)
+
+    return exploded
 
 
 #
