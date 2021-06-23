@@ -29,4 +29,4 @@
 - Show the best motion picture content rating for each of the recommended genres.
 
 ## Screenshots
-![Arthur](./images/Arthur.png)
+![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
