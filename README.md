@@ -32,13 +32,13 @@ The following graph shows the the popular genres with the worldwide gross
 ![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
 
 ##Team
--Mia Fryer <br>
-    -Github: miazfryer
--Ian Sharff <br>
-    -Github: iansharff
--Arthur Kim <br>
-    -Github: arthurk2323
--Eddie Lin <br>
-    -Github: RedDragonfruit
+- Mia Fryer <br>
+    Github: miazfryer<br>
+- Ian Sharff <br>
+    Github: iansharff<br>
+- Arthur Kim <br>
+    Github: arthurk2323<br>
+- Eddie Lin <br>
+    Github: RedDragonfruit<br>
 
 
