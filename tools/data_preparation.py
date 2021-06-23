@@ -34,7 +34,6 @@ These functions merge DataFrames produced by the single file cleaning functions
 """
 
 
-# Ian - ROTTEN TOMATOES
 def merge_rt_data(focus=None, by='total_positive'):
     """Return inner-joined DataFrame, or a feature-engineered subset of it with the focus parameter"""
     # Initialize DataFrames
@@ -72,7 +71,6 @@ def merge_rt_data(focus=None, by='total_positive'):
     return rt_df
 
 
-# Arthur - gross to numvotes
 def merge_bom_and_imdb():
     """Merge the Box Office Mojo and IMDB title ratings and basics DataFrames"""
     # Initialize DataFrames
@@ -118,7 +116,6 @@ def merge_bom_and_imdb():
     return final_df
 
 
-# Arthur
 def merge_imdb_title_and_ratings():
     """Merge, clean and sort combined IMDB title and ratings DataFrame"""
     # Initialize DataFrames, exploding and not cleaning the titles of 'basics_df'
@@ -153,7 +150,6 @@ def merge_imdb_title_and_ratings():
     return main_df
 
 
-# Arthur
 def merge_imdb_top_crew(select_genre=None, select_role=None):
     """
     Return a filtered dataframe containing the top choices for cast/producers for movies of a given genre
@@ -295,11 +291,6 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     return info_df
 
 
-#
-# TN MOVIE BUDGET CLEANING FUNCTIONS
-#
-
-
 def clean_tn_budgets():
     """Return a clean DataFrame from The Numbers information on budget"""
     # Initialize DataFrame
@@ -314,11 +305,6 @@ def clean_tn_budgets():
         tn_df[col] = tn_df[col].map(dollars_to_num)
 
     return tn_df
-
-
-#
-# BOX OFFICE MOJO CLEANING FUNCTIONS
-#
 
 
 def clean_bom_gross():
@@ -339,11 +325,6 @@ def clean_bom_gross():
     return bom_df
 
 
-#
-# TMDB CLEANING FUNCTIONS
-#
-
-
 def tmdb_genre_dict():
     with open(TMDB_GENRE_IDS) as f:
         return {int(i): genre for i, genre in json.load(f).items()}
@@ -359,11 +340,6 @@ def clean_tmdb_movies():
     exploded['genre_ids'] = exploded['genre_ids'].map(genre_dict)
 
     return exploded
-
-
-#
-# IMDB CLEANING FUNCTIONS
-#
 
 
 def clean_imdb_name_basics():
