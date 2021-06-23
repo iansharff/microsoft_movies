@@ -364,3 +364,45 @@ def merge_imdb_title_and_ratings():
     main_df.sort_values('numvotes', ascending=False, inplace=True)
 
     return main_df
+
+
+def merge_imdb_top_crew(select_genre=None, select_role=None):
+    """
+    Return a filtered dataframe containing the top choices for cast/producers for movies of a given genre
+
+    @param select_genre: {'Drama', 'Action', 'Adventure', 'Comedy'}
+    @param select_role: {'actor', 'actress', 'director', 'writer'}
+    @return: pd.DataFrame
+    """
+    # Initialize DataFrames, exploding and not cleaning the titles of the title_basics file
+    title_basics_df = clean_imdb_title_basics(clean_titles=False, explode=True)
+    ratings_df = clean_imdb_title_ratings()
+    principals_df = clean_imdb_title_principals()
+    name_basics_df = clean_imdb_name_basics()
+
+    # Filter genres not in the top four, determined from other data
+    filtered_title_basics = title_basics_df[(title_basics_df['genres'] == 'Drama') |
+                                            (title_basics_df['genres'] == 'Action') |
+                                            (title_basics_df['genres'] == 'Adventure') |
+                                            (title_basics_df['genres'] == 'Comedy')]
+    # Combine the four DataFrames by inner merge
+    combined = pd.merge(filtered_title_basics, ratings_df, how='inner', on='tconst')
+    combined = pd.merge(combined, principals_df, how='inner', on='tconst')
+    combined = pd.merge(combined, name_basics_df, how='inner', on='nconst')
+
+    # Filter by 'start_year' and only include actors, actresses, directors, and writers
+    combined = combined[combined['start_year'] > 2014]
+    combined = combined[(combined['category'] == 'actor') |
+                        (combined['category'] == 'actress') |
+                        (combined['category'] == 'director') |
+                        (combined['category'] == 'writer')]
+
+    # Keep rows where the number of votes is higher than the average
+    final_df = combined[combined['numvotes'] > combined['numvotes'].mean()]
+
+    if select_genre:
+        final_df = combined[combined['genres'] == select_genre]
+        if select_role:
+            final_df = final_df[final_df['category'] == select_role]
+
+    return final_df.sort_values(['averagerating', 'numvotes'], ascending=(False, False))
