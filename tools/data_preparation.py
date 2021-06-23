@@ -7,7 +7,6 @@ import ast
 import json
 import string
 import pandas as pd
-from tools.TN_File_Eddie import eddies_function
 
 # Define global constants for relative paths from microsoft_movies_directory
 RT_REVIEWS_PATH = "./data/rt.reviews.tsv"
@@ -198,7 +197,7 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
 
 
 # Eddie
-def merge_tn_imdb():
+# def merge_tn_imdb():
     # """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
     # # Initialize DataFrames
     # imdb_movies_df = clean_imdb_title_basics(explode=True)
@@ -217,7 +216,7 @@ def merge_tn_imdb():
     # final_df = simplified.groupby('genres').mean() / 10 ** 6
     # final_df.sort_values('net_gain', ascending=False, inplace=True)
     # return final_df
-    eddies_function()
+    # return eddies_function()
 
 
 """
