@@ -25,7 +25,12 @@ TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
 
 """
 MERGING FUNCTIONS:
-These functions return merged DataFrames using the initial cleaning functions
+These functions merge DataFrames produced by the single file cleaning functions
+1. merge_rt_data
+2. merge_bom_and_imdb
+3. merge_imdb_title_and_ratings
+4. merge_imdb_top_crew
+5. merge_tn_tmdb
 """
 
 
