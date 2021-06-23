@@ -9,7 +9,7 @@
 
 
 ## General Information
-- Exploring data from Box Office Mojo, IMDB, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
+- Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
 - The theoretical client has created a new studio and wants to develop original video content. <br>
 -In order for the client to successfully compete with its competitors, the client tasked our team to determine three recommendations on what type of films they should create.
 
