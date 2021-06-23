@@ -18,7 +18,7 @@
 - Python 
 - Jupyter notebook
 - draw.io
-- 
+
 ## Features
 - Top movie geres based on user ratings.
 - Top movie geres based on domestic and foreign gross. 
