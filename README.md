@@ -1,8 +1,8 @@
 # Project Hollywood
 >First coding project using data to extrapolate actionable insights on the movie industry.
->Practical expereince on how to clean and manipulate real world data from a given set of data.
->Provide insight on the process and analyze the data to provide a recommendation based on the data.
->Provide visual data to support our claim.
+><br>Practical expereince on how to clean and manipulate real world data from a given set of data.
+><br>Provide insight on the process and analyze the data to provide a recommendation based on the data.
+>P<br>rovide visual data to support our claim.
 
 ## Table of Contents
 * [General Info](#general-information)
