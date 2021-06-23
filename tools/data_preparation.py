@@ -122,7 +122,7 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     return info_df
 
 
-def merge_rt_data(focus=None):
+def merge_rt_data(focus=None, by='total_positive'):
     """Return inner-joined DataFrame, or a feature-engineered subset of it with the focus parameter"""
     # Initialize DataFrames
     reviews_df = clean_rt_reviews()
@@ -144,7 +144,7 @@ def merge_rt_data(focus=None):
                                 'mean': 'percent_positive'}, inplace=True)
 
         # Sort values by quantity of positive reviews
-        rt_df = grouped.sort_values('total_positive', ascending=False)
+        rt_df = grouped.sort_values(by=by, ascending=False)
 
     # Handle similarly for rating popularity
     elif focus == 'rating_popularity':
@@ -153,7 +153,7 @@ def merge_rt_data(focus=None):
                                 'sum': 'total_positive',
                                 'mean': 'percent_positive'}, inplace=True)
 
-        rt_df = grouped.sort_values('total_positive', ascending=False)
+        rt_df = grouped.sort_values(by=by, ascending=False)
 
     # Return unmodified DataFrame if 'focus' parameter is not passed
     return rt_df
