@@ -1,8 +1,8 @@
 # Project Hollywood
 >First coding project using data to extrapolate actionable insights on the movie industry.
->Practical expereince on how to clean and manipulate real world data.
-
-
+>Practical expereince on how to clean and manipulate real world data from a given set of data.
+>Provide insight on the process and analyze the data to provide a recommendation based on the data.
+>Provide visual data to support our claim.
 
 ## Table of Contents
 * [General Info](#general-information)
@@ -22,9 +22,11 @@
 - Jupyter notebook
 
 ## Features
-- Top movie geres based on ratings 
-- Top movie geres based on domestic and foreign gross 
-- Top movie geres based on production crews 
+- Top movie geres based on user ratings.
+- Top movie geres based on domestic and foreign gross. 
+- Top directors based on movie genres. 
+- Show the most profitable genres.
+- Show the best motion picture content rating for each of the recommended genres.
 
 ## Screenshots
 ![Arthur](./images/Arthur.png)
