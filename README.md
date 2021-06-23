@@ -31,7 +31,7 @@
 The following graph shows the the popular genres with the worldwide gross
 ![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
 
-##Team
+## Team
 - Mia Fryer <br>
     Github: miazfryer<br>
 - Ian Sharff <br>
