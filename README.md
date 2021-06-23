@@ -27,4 +27,4 @@
 - Top movie geres based on production crews 
 
 ## Screenshots
-![Arthur](./images/Arthur.png)
+![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
