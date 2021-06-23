@@ -7,6 +7,7 @@ import ast
 import json
 import string
 import pandas as pd
+from tools.TN_File_Eddie import eddies_function
 
 # Define global constants for relative paths from microsoft_movies_directory
 RT_REVIEWS_PATH = "./data/rt.reviews.tsv"
@@ -197,23 +198,26 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
 
 
 # Eddie
-def merge_tn_tmdb():
-    """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
-    # Initialize DataFrames
-    tmdb_movies_df = clean_tmdb_movies()
-    tn_df = clean_tn_budgets()
-
-    # Merge DataFrames
-    combined = pd.merge(tmdb_movies_df, tn_df, how='inner', left_on='original_title', right_on='movie')
-    simplified = combined[['genre_ids', 'production_budget', 'domestic_gross', 'worldwide_gross']]
-    eval_exp = '''
-    international_gross = worldwide_gross - domestic_gross
-    net_gain = worldwide_gross - production_budget
-    '''
-    simplified.eval(eval_exp, inplace=True)
-    final_df = simplified.groupby('genre_ids').mean() / 10 ** 6
-    final_df.sort_values('net_gain', ascending=False, inplace=True)
-    return final_df
+def merge_tn_imdb():
+    # """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
+    # # Initialize DataFrames
+    # imdb_movies_df = clean_imdb_title_basics(explode=True)
+    # tmdb_df = clean_tmdb_movies()
+    # tn_df = clean_tn_budgets()
+    #
+    # # Merge DataFrames
+    # combined = pd.merge(imdb_movies_df, tn_df, how='inner', left_on='cleaned_title', right_on='movie')
+    #
+    # simplified = combined[['genres', 'production_budget', 'domestic_gross', 'worldwide_gross']]
+    # eval_exp = '''
+    # international_gross = worldwide_gross - domestic_gross
+    # net_gain = worldwide_gross - production_budget
+    # '''
+    # simplified.eval(eval_exp, inplace=True)
+    # final_df = simplified.groupby('genres').mean() / 10 ** 6
+    # final_df.sort_values('net_gain', ascending=False, inplace=True)
+    # return final_df
+    eddies_function()
 
 
 """
