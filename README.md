@@ -11,12 +11,12 @@
 ## General Information
 - Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
 - The theoretical client has created a new studio and wants to develop original video content. <br>
--In order for the client to successfully compete with its competitors, the client tasked our team to determine three recommendations on what type of films they should create.
+- In order for the client to successfully compete with its competitors, the client tasked our team to determine three recommendations on what type of films they should create.
 
 
-## Technologies Used
+## Programming Language and other tools
 - Python 
-- Jupyter notebook
+- Jupyter notebook, Pycharm
 - draw.io
 
 ## Features
@@ -30,3 +30,15 @@
 
 The following graph shows the the popular genres with the worldwide gross
 ![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
+
+##Team
+-Mia Fryer <br>
+    -Github: miazfryer
+-Ian Sharff <br>
+    -Github: iansharff
+-Arthur Kim <br>
+    -Github: arthurk2323
+-Eddie Lin <br>
+    -Github: RedDragonfruit
+
+
