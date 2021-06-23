@@ -244,7 +244,7 @@ def merge_bom_and_imdb():
                                                   foreign_gross=pd.NamedAgg('foreign_gross', 'mean'),
                                                   total_gross=pd.NamedAgg('total_gross', 'mean'))
 
-    # Add more columns for weighted average and scaled gross for plotting
+    # Add more columns for weighted average rating and scaled gross for plotting
     eval_exp2 = '''
     wavg_rating = avgrating_x_numvotes / numvotes
     total_gross_scaled = total_gross / 10 ** 5
@@ -297,7 +297,7 @@ def clean_imdb_title_akas():
     return imdb_title_akas_df
 
 
-def clean_imdb_title_basics():
+def clean_imdb_title_basics(clean_titles=True, explode=False):
     # Initialize DataFrame
     title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
 
@@ -305,7 +305,12 @@ def clean_imdb_title_basics():
     title_basics_df.dropna(subset=['genres'], inplace=True)
 
     # Remove punctuation and spaces from title names and make new column, 'cleaned_title'
-    title_basics_df['cleaned_title'] = title_basics_df['primary_title'].map(remove_punctuation)
+    if clean_titles:
+        title_basics_df['cleaned_title'] = title_basics_df['primary_title'].map(remove_punctuation)
+
+    if explode:
+        title_basics_df['genres'] = title_basics_df['genres'].str.strip().str.split(',')
+        title_basics_df = title_basics_df.explode('genres')
 
     return title_basics_df
 
@@ -323,6 +328,39 @@ def clean_imdb_title_principals():
 
 
 def clean_imdb_title_ratings():
-    imdb_title_ratings_df = pd.read_csv(IMDB_TITLE_RATINGS)
+    """Read DataFrame from IMDB title ratings file: already clean"""
+    return pd.read_csv(IMDB_TITLE_RATINGS)
 
-    return imdb_title_ratings_df
+
+def merge_imdb_title_and_ratings():
+    """Merge, clean and sort combined IMDB title and ratings DataFrame"""
+    # Initialize DataFrames, exploding and not cleaning the titles of 'basics_df'
+    basics_df = clean_imdb_title_basics(clean_titles=False, explode=True)
+    ratings_df = clean_imdb_title_ratings()
+
+    # Merge the DataFrames
+    combined = pd.merge(basics_df, ratings_df, how='inner', on='tconst')
+
+    # Create column for averagerating * numvotes and aggregate
+    eval_exp1 = '''
+    avgrating_x_numvotes = averagerating * numvotes
+    '''
+    subset = combined[['genres', 'numvotes', 'averagerating']].eval(eval_exp1)
+    main_df = subset.groupby('genres').aggregate(numvotes=pd.NamedAgg('numvotes', 'sum'),
+                                                 avgrating_x_numvotes=pd.NamedAgg('avgrating_x_numvotes', 'sum'),
+                                                 avgnumvotes=pd.NamedAgg('numvotes', 'mean'))
+
+    # Create column for weighted average rating
+    eval_exp2 = '''
+    wavg_rating = avgrating_x_numvotes / numvotes
+    '''
+    main_df.eval(eval_exp2, inplace=True)
+
+    # Drop the 'Adult' genre row, which was a significant outlier that will not be part of the recommendation
+    main_df.drop(index='Adult', inplace=True)
+
+    # Reset the index and sort by 'numvotes' in descending order
+    main_df.reset_index(inplace=True)
+    main_df.sort_values('numvotes', ascending=False, inplace=True)
+
+    return main_df
