@@ -7,15 +7,6 @@ import string
 import pandas as pd
 import numpy as np
 
-# Define test data for debugging
-# n = np.NaN
-# data = [[n, n, n, n, n],
-#         [1, n, n, n, n],
-#         [1, 1, n, n, n],
-#         [1, 1, 1, n, n],
-#         [1, 1, 1, 1, n]]
-# test = pd.DataFrame(columns=['A', 'B', 'C', 'D', 'E'], data=data)
-
 # Define global constants for relative paths from within the tools package
 RT_REVIEWS_PATH = "./data/rt.reviews.tsv"
 RT_MOVIE_INFO = "./data/rt.movie_info.tsv"
@@ -286,50 +277,47 @@ def clean_tmdb_movies():
 
 
 def clean_imdb_name_basics():
-    imdb_name_basics_df = pd.read_csv(IMDB_NAME_BASICS)
-
-    return imdb_name_basics_df
+    """Read DataFrame from IMDB name basics file: already clean"""
+    return pd.read_csv(IMDB_NAME_BASICS)
 
 
 def clean_imdb_title_akas():
-    imdb_title_akas_df = pd.read_csv(IMDB_TITLE_AKAS)
+    """Read DataFrame from IMDB title akas file: already clean"""
+    return pd.read_csv(IMDB_TITLE_AKAS)
 
-    return imdb_title_akas_df
+
+def clean_imdb_title_crew():
+    """Read DataFrame from IMDB title crew file: already clean"""
+    return pd.read_csv(IMDB_TITLE_CREW)
+
+
+def clean_imdb_title_principals():
+    """Read DataFrame from IMDB title principles file: already clean"""
+    return pd.read_csv(IMDB_TITLE_PRINCIPALS)
+
+
+def clean_imdb_title_ratings():
+    """Read DataFrame from IMDB title ratings file: already clean"""
+    return pd.read_csv(IMDB_TITLE_RATINGS)
 
 
 def clean_imdb_title_basics(clean_titles=True, explode=False):
+    """ Return cleaned IMDB title basics DataFrame"""
     # Initialize DataFrame
     title_basics_df = pd.read_csv(IMDB_TITLE_BASICS)
 
     # Drop rows without genres
     title_basics_df.dropna(subset=['genres'], inplace=True)
 
-    # Remove punctuation and spaces from title names and make new column, 'cleaned_title'
+    # Remove punctuation and spaces from title names and make new column, 'cleaned_title', if specified
     if clean_titles:
         title_basics_df['cleaned_title'] = title_basics_df['primary_title'].map(remove_punctuation)
-
+    # Explode DataFrame on 'genres' column if specified
     if explode:
         title_basics_df['genres'] = title_basics_df['genres'].str.strip().str.split(',')
         title_basics_df = title_basics_df.explode('genres')
 
     return title_basics_df
-
-
-def clean_imdb_title_crew():
-    imdb_title_crew_df = pd.read_csv(IMDB_TITLE_CREW)
-
-    return imdb_title_crew_df
-
-
-def clean_imdb_title_principals():
-    imdb_title_principals_df = pd.read_csv(IMDB_TITLE_PRINCIPALS)
-
-    return imdb_title_principals_df
-
-
-def clean_imdb_title_ratings():
-    """Read DataFrame from IMDB title ratings file: already clean"""
-    return pd.read_csv(IMDB_TITLE_RATINGS)
 
 
 def merge_imdb_title_and_ratings():
