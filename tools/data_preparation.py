@@ -7,7 +7,7 @@ import string
 import pandas as pd
 import numpy as np
 
-# Define global constants for relative paths from within the tools package
+# Define global constants for relative paths from microsoft_movies_directory
 RT_REVIEWS_PATH = "./data/rt.reviews.tsv"
 RT_MOVIE_INFO = "./data/rt.movie_info.tsv"
 BOM_GROSS = "./data/bom.movie_gross.csv"
@@ -261,7 +261,6 @@ def tmdb_genre_dict():
 def clean_tmdb_movies():
     tmdb_movies_df = pd.read_csv(TMDB_MOVIES)
     tmdb_movies_df.drop('Unnamed: 0', axis=1, inplace=True)
-    # tmdb_movies_df = tmdb_movies_df.loc[tmdb_movies_df['genre_ids'] != '[]']
     tmdb_movies_df['genre_ids'] = tmdb_movies_df['genre_ids'].map(ast.literal_eval)
 
     genre_dict = tmdb_genre_dict()
@@ -269,6 +268,25 @@ def clean_tmdb_movies():
     exploded['genre_ids'] = exploded['genre_ids'].map(genre_dict)
 
     return exploded
+
+
+def merge_tn_tmdb():
+    """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
+    # Initialize DataFrames
+    tmdb_movies_df = clean_tmdb_movies()
+    tn_df = clean_tn_budgets()
+
+    # Merge DataFrames
+    combined = pd.merge(tmdb_movies_df, tn_df, how='inner', left_on='original_title', right_on='movie')
+    simplified = combined[['genre_ids', 'production_budget', 'domestic_gross', 'worldwide_gross']]
+    eval_exp = '''
+    international_gross = worldwide_gross - domestic_gross
+    net_gain = worldwide_gross - production_budget
+    '''
+    simplified.eval(eval_exp, inplace=True)
+    final_df = simplified.groupby('genre_ids').mean() / 10 ** 6
+    final_df.sort_values('net_gain', ascending=False, inplace=True)
+    return final_df
 
 
 #
