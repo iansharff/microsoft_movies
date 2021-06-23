@@ -1,5 +1,5 @@
 # Project Hollywood
->This repository is our first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This data will use all but one (tmdb) of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explination on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.
+>This repository is our first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This project will use all but one (tmdb) of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explination on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.
 
 ## Table of Contents
 * [General Info](#general-information)
