@@ -1,4 +1,4 @@
-# Project Hollywood
+# Microsoft Motion Pictures
 >This repository is our analysis on several movie databases to find trends within and to propose recommendations to Microsoft who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done to reach our final conclusions and recommendations.
 >
 >
