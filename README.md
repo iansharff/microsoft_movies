@@ -73,10 +73,31 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 
 ## Project Structure
 ```
-├── README.md                           <- The top-level README for reviewers of this project
-├── dsc-phase1-project-template.ipynb   <- Narrative documentation of analysis in Jupyter notebook
-├── DS_Project_Presentation.pdf         <- PDF version of project presentation
-├── data                                <- Both sourced externally and generated from code
-└── images                              <- Both sourced externally and generated from code
+├── README.md
+├── __init__.py
+├── data
+│   ├── bom.movie_gross.csv
+│   ├── imdb.name.basics.csv
+│   ├── imdb.title.akas.csv
+│   ├── imdb.title.basics.csv
+│   ├── imdb.title.crew.csv
+│   ├── imdb.title.principals.csv
+│   ├── imdb.title.ratings.csv
+│   ├── rt.movie_info.tsv
+│   ├── rt.reviews.tsv
+│   ├── tmdb.movies.csv
+│   ├── tmdb_genre_ids.json
+│   └── tn.movie_budgets.csv
+├── images
+├── individuals
+│   ├── arthur
+│   ├── eddie
+│   ├── ian
+│   └── mia
+├── microsoft_motion_pictures.ipynb
+└── tools
+    ├── TN_File_Eddie.py
+    ├── __init__.py
+    ├── data_preparation.py
+    └── tools_demo.ipynb
 ```
-
