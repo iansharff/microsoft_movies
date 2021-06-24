@@ -89,15 +89,15 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 │   ├── tmdb_genre_ids.json
 │   └── tn.movie_budgets.csv
 ├── images      <-- Externally obtained and internally generated images
-├── individuals
+├── individuals     <--- Directory for individual workspaces
 │   ├── arthur
 │   ├── eddie
 │   ├── ian
 │   └── mia
 ├── microsoft_motion_pictures.ipynb     <-- Jupyter Notebook illustrating analysis
-└── tools     <-- module containing cleaning, merging, parsing, and support functions
-    ├── TN_File_Eddie.py  <-- contains function definition for IMDB + TN analysis
+└── tools     <-- Module containing cleaning, merging, parsing, and support functions
+    ├── TN_File_Eddie.py  <-- Contains function definition for IMDB + TN analysis
     ├── __init__.py
-    ├── data_preparation.py   <-- contains bulk of data_preparation functions
-    └── tools_demo.ipynb      <-- illustrative Jupyter Notebook showcasing module use
+    ├── data_preparation.py   <-- Contains bulk of data_preparation functions
+    └── tools_demo.ipynb      <-- Illustrative Jupyter Notebook showcasing module use
 ```
