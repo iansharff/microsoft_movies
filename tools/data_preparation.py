@@ -1,13 +1,16 @@
 """
 This module is to be used for data cleaning and preparation.
 
-
+CONTENTS
+I. imports and path constants
+II. merging functions
+III. single file cleaning functions
+IV. miscellaneous helper functions
 """
 import ast
 import json
 import string
 import pandas as pd
-from tools.TN_File_Eddie import eddies_function
 
 # Define global constants for relative paths from microsoft_movies_directory
 RT_REVIEWS_PATH = "./data/rt.reviews.tsv"
@@ -25,6 +28,7 @@ TN_BUDGETS = "./data/tn.movie_budgets.csv"
 TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
 
 """
+II.
 MERGING FUNCTIONS:
 These functions merge DataFrames produced by the single file cleaning functions
 1. merge_rt_data
@@ -35,7 +39,6 @@ These functions merge DataFrames produced by the single file cleaning functions
 """
 
 
-# Ian - ROTTEN TOMATOES
 def merge_rt_data(focus=None, by='total_positive'):
     """Return inner-joined DataFrame, or a feature-engineered subset of it with the focus parameter"""
     # Initialize DataFrames
@@ -47,7 +50,7 @@ def merge_rt_data(focus=None, by='total_positive'):
 
     # If genre_popularity is passed, then subset with 'genre' and 'fresh' columns, then explode on 'genre'
     if focus == 'genre_popularity':
-        exploded = rt_df[['genre', 'fresh']].explode('genre', ignore_index=True)
+        exploded = rt_df[['genre', 'fresh']].explode('genre')
 
         # Group by genre and aggregate 'fresh' with 'count', 'sum' and 'mean'
         grouped = exploded.groupby('genre')['fresh'].aggregate(['count', 'sum', 'mean'])
@@ -69,11 +72,22 @@ def merge_rt_data(focus=None, by='total_positive'):
 
         rt_df = grouped.sort_values(by=by, ascending=False)
 
+    # Return DataFrame suitable for plotting
+    elif focus == 'combined_popularity':
+        exploded = rt_df[['genre', 'rating', 'fresh']].explode('genre')
+        grouped = exploded.groupby(['genre', 'rating'])['fresh'].aggregate(['count', 'sum', 'mean'])
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+        grouped.reset_index(inplace=True)
+        # To sort ratings in sequential order, the column was made into a Categorical Series
+        grouped['rating'] = pd.Categorical(grouped['rating'], ['G', 'PG', 'PG-13', 'R', 'NR'])
+        rt_df = grouped.sort_values(['genre', 'rating'])
     # Return unmodified DataFrame if 'focus' parameter is not passed
     return rt_df
 
 
-# Arthur - gross to numvotes
+# Arthur and Mia
 def merge_bom_and_imdb():
     """Merge the Box Office Mojo and IMDB title ratings and basics DataFrames"""
     # Initialize DataFrames
@@ -154,7 +168,6 @@ def merge_imdb_title_and_ratings():
     return main_df
 
 
-# Arthur
 def merge_imdb_top_crew(select_genre=None, select_role=None):
     """
     Return a filtered dataframe containing the top choices for cast/producers for movies of a given genre
@@ -170,10 +183,11 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
     name_basics_df = clean_imdb_name_basics()
 
     # Filter genres not in the top four, determined from other data
-    filtered_title_basics = title_basics_df[(title_basics_df['genres'] == 'Drama') |
+    filtered_title_basics = title_basics_df[(title_basics_df['genres'] == 'Sci-Fi') |
                                             (title_basics_df['genres'] == 'Action') |
                                             (title_basics_df['genres'] == 'Adventure') |
-                                            (title_basics_df['genres'] == 'Comedy')]
+                                            (title_basics_df['genres'] == 'Fantasy') |
+                                            (title_basics_df['genres'] == 'Animation')]
     # Combine the four DataFrames by inner merge
     combined = pd.merge(filtered_title_basics, ratings_df, how='inner', on='tconst')
     combined = pd.merge(combined, principals_df, how='inner', on='tconst')
@@ -187,10 +201,10 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
                         (combined['category'] == 'writer')]
 
     # Keep rows where the number of votes is higher than the average
-    final_df = combined[combined['numvotes'] > combined['numvotes'].mean()]
+    final_df = combined[combined['numvotes'] > 100000]
 
     if select_genre:
-        final_df = combined[combined['genres'] == select_genre]
+        final_df = final_df[final_df['genres'] == select_genre]
         if select_role:
             final_df = final_df[final_df['category'] == select_role]
 
@@ -198,29 +212,31 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
 
 
 # Eddie
-def merge_tn_imdb():
-    # """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
-    # # Initialize DataFrames
-    # imdb_movies_df = clean_imdb_title_basics(explode=True)
-    # tmdb_df = clean_tmdb_movies()
-    # tn_df = clean_tn_budgets()
-    #
-    # # Merge DataFrames
-    # combined = pd.merge(imdb_movies_df, tn_df, how='inner', left_on='cleaned_title', right_on='movie')
-    #
-    # simplified = combined[['genres', 'production_budget', 'domestic_gross', 'worldwide_gross']]
-    # eval_exp = '''
-    # international_gross = worldwide_gross - domestic_gross
-    # net_gain = worldwide_gross - production_budget
-    # '''
-    # simplified.eval(eval_exp, inplace=True)
-    # final_df = simplified.groupby('genres').mean() / 10 ** 6
-    # final_df.sort_values('net_gain', ascending=False, inplace=True)
-    # return final_df
-    eddies_function()
+# def merge_tn_imdb():
+# """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
+# # Initialize DataFrames
+# imdb_movies_df = clean_imdb_title_basics(explode=True)
+# tmdb_df = clean_tmdb_movies()
+# tn_df = clean_tn_budgets()
+#
+# # Merge DataFrames
+# combined = pd.merge(imdb_movies_df, tn_df, how='inner', left_on='cleaned_title', right_on='movie')
+#
+# simplified = combined[['genres', 'production_budget', 'domestic_gross', 'worldwide_gross']]
+# eval_exp = '''
+# international_gross = worldwide_gross - domestic_gross
+# net_gain = worldwide_gross - production_budget
+# '''
+# simplified.eval(eval_exp, inplace=True)
+# final_df = simplified.groupby('genres').mean() / 10 ** 6
+# final_df.sort_values('net_gain', ascending=False, inplace=True)
+# return final_df
+# return eddies_function()
 
 
 """
+III.
+
 SINGLE FILE CLEANING FUNCTIONS
 These functions each clean one of the provided csv files, and one obtains genre ids from a .json file
 
@@ -296,11 +312,6 @@ def clean_rt_movie_info(path=RT_MOVIE_INFO, dropna=False, subset=None):
     return info_df
 
 
-#
-# TN MOVIE BUDGET CLEANING FUNCTIONS
-#
-
-
 def clean_tn_budgets():
     """Return a clean DataFrame from The Numbers information on budget"""
     # Initialize DataFrame
@@ -315,11 +326,6 @@ def clean_tn_budgets():
         tn_df[col] = tn_df[col].map(dollars_to_num)
 
     return tn_df
-
-
-#
-# BOX OFFICE MOJO CLEANING FUNCTIONS
-#
 
 
 def clean_bom_gross():
@@ -340,11 +346,6 @@ def clean_bom_gross():
     return bom_df
 
 
-#
-# TMDB CLEANING FUNCTIONS
-#
-
-
 def tmdb_genre_dict():
     with open(TMDB_GENRE_IDS) as f:
         return {int(i): genre for i, genre in json.load(f).items()}
@@ -360,11 +361,6 @@ def clean_tmdb_movies():
     exploded['genre_ids'] = exploded['genre_ids'].map(genre_dict)
 
     return exploded
-
-
-#
-# IMDB CLEANING FUNCTIONS
-#
 
 
 def clean_imdb_name_basics():
