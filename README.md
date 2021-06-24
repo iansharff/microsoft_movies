@@ -1,9 +1,7 @@
 # Project Hollywood
->This repository is our analysis on several movie databases to find trends within and to propose recommendations to our client who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done to reach our final conclusions.
+>This repository is our analysis on several movie databases to find trends within and to propose recommendations to Microsoft who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done to reach our final conclusions and recommendations.
 >
 >
-> <first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This project will use all of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explanation on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.>
-
 ## Table of Contents
 * [General Info](#general-information)
 * [Database](#database)
@@ -28,6 +26,8 @@ The IMDb schemas were connected by tconst and nconst. While the other data were 
 
 ## Analysis
 Two seperate analysis was done to confirm which genres were the best. The first analysis compared the IMDb database with the BOM database to see which genres were the most popular based upon the number of of votes. We made an assumption that all people have the same probabilty to vote online in a given database which means that the more vote is present, the more popular a specific movie genre  will be.
+  
+  ![graph_revenue_genre](./images/highest_gross_revenue.png)
 
 With that in mind, the IMDb data were merged all initially analyzed for the popularity and the BOM database was added later to provides the overall gross for each film genre. Just from these two database, we found that certain genres were far more popular than others and at the same time, managed to pull in more revenue.
 
@@ -39,13 +39,13 @@ One thing to note here is that a movie with a musical genre is shown as one of t
 
 With a clear set of genres in mind, a backbone to any good movie is having a good director leading the charge. By confirming the genres with two seperate database. If we assume that a popular movie will be able to make the best return, we can find the most popular movie and figure out who the best directors are.
 
-insert figure here
+i![graph of_cerw](./images/crew.png)
   
-In the figure ablove, the top movies are Advengers:Endgame , Mad Max: Fury Road, and Z where the directors are the Russo Brothers, George Miller, zz respectively.
+In the figure ablove, the top movies are Advengers:Endgame , Mad Max: Fury Road, and Deadpool where the directors are the Russo Brothers, George Miller, Tim Miller respectively.
     
 Wth a good diretor supporting the movie production, we also need to figure out who our target audience will be. Taking a look at the Rotten Tomatoes database and our primary genres of focus, we see that nearly all the primary categories have a good rating among the General audience (G). While the total numbers of reviews in the G category is lower in most cases, we can also assume that there are far fewer kids who would be writing reviews online for these movies. Also with a general rating, this rating is suitable for more people thus increase the chances of more views and be more profitable.
 
-![graph of_rating](./images/ian2.png)
+![graph of_rating](./images/ian.png)
 
 
 ## Programming Language and other tools
