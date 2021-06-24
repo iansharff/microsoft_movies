@@ -1,5 +1,5 @@
 # Project Hollywood
->This repository is our analysis on several movie databases to find trends within and to propose recommendations to our client who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done reach our final conclusions.
+>This repository is our analysis on several movie databases to find trends within and to propose recommendations to our client who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done to reach our final conclusions.
 >
 >
 > <first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This project will use all of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explanation on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.>
