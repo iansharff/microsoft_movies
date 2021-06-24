@@ -33,7 +33,18 @@ To doublecheck this result and to incorporate the production budget, a seperate 
 
 One thing to note here is that a movie with a musical genre is shown as one of the highest returns, there were very few points of the data that had this information so we decided it would not be a good recommendation, however due to the high return it cannot simply be ignored.
 
-With a clear set of genres in mind, a backbone to any good movie is having a good director leading the charge. By confirming the genres with two seperate database, we can look directly into these genres. 
+With a clear set of genres in mind, a backbone to any good movie is having a good director leading the charge. By confirming the genres with two seperate database. If we assume that a popular movie will be able to make the best return, we can find the most popular movie and figure out who the best directors are.
+
+insert figure here
+  
+In the figure ablove, the top movies are X , Y, and Z where the directors are xx, yy, zz respectively.
+    
+Wth a good diretor supporting the movie production, we also need to figure out who our target audience will be. Taking a look at the Rotten Tomatoes database and our primary genres of focus, we see that nearly all the primary categories have a good rating among the General audience (G). While the total numbers of reviews in the G category is lower in most cases, we can also assume that there are far fewer kids who would be writing reviews online for these movies. Also with a general rating, this rating is suitable for more people thus increase the chances of more views and be more profitable.
+
+![graph of_rating](./images/ian2.png)
+
+
+
 ## Programming Language and other tools
 - Python 
 - Jupyter notebook, Pycharm
