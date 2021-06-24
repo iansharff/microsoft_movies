@@ -1,7 +1,11 @@
 """
 This module is to be used for data cleaning and preparation.
 
-
+CONTENTS
+I. imports and path constants
+II. merging functions
+III. single file cleaning functions
+IV. miscellaneous helper functions
 """
 import ast
 import json
@@ -24,6 +28,7 @@ TN_BUDGETS = "./data/tn.movie_budgets.csv"
 TMDB_GENRE_IDS = './data/tmdb_genre_ids.json'
 
 """
+II.
 MERGING FUNCTIONS:
 These functions merge DataFrames produced by the single file cleaning functions
 1. merge_rt_data
@@ -45,7 +50,7 @@ def merge_rt_data(focus=None, by='total_positive'):
 
     # If genre_popularity is passed, then subset with 'genre' and 'fresh' columns, then explode on 'genre'
     if focus == 'genre_popularity':
-        exploded = rt_df[['genre', 'fresh']].explode('genre', ignore_index=True)
+        exploded = rt_df[['genre', 'fresh']].explode('genre')
 
         # Group by genre and aggregate 'fresh' with 'count', 'sum' and 'mean'
         grouped = exploded.groupby('genre')['fresh'].aggregate(['count', 'sum', 'mean'])
@@ -67,10 +72,22 @@ def merge_rt_data(focus=None, by='total_positive'):
 
         rt_df = grouped.sort_values(by=by, ascending=False)
 
+    # Return DataFrame suitable for plotting
+    elif focus == 'combined_popularity':
+        exploded = rt_df[['genre', 'rating', 'fresh']].explode('genre')
+        grouped = exploded.groupby(['genre', 'rating'])['fresh'].aggregate(['count', 'sum', 'mean'])
+        grouped.rename(columns={'count': 'total_references',
+                                'sum': 'total_positive',
+                                'mean': 'percent_positive'}, inplace=True)
+        grouped.reset_index(inplace=True)
+        # To sort ratings in sequential order, the column was made into a Categorical Series
+        grouped['rating'] = pd.Categorical(grouped['rating'], ['G', 'PG', 'PG-13', 'R', 'NR'])
+        rt_df = grouped.sort_values(['genre', 'rating'])
     # Return unmodified DataFrame if 'focus' parameter is not passed
     return rt_df
 
 
+# Arthur and Mia
 def merge_bom_and_imdb():
     """Merge the Box Office Mojo and IMDB title ratings and basics DataFrames"""
     # Initialize DataFrames
@@ -116,6 +133,7 @@ def merge_bom_and_imdb():
     return final_df
 
 
+# Arthur
 def merge_imdb_title_and_ratings():
     """Merge, clean and sort combined IMDB title and ratings DataFrame"""
     # Initialize DataFrames, exploding and not cleaning the titles of 'basics_df'
@@ -194,28 +212,30 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
 
 # Eddie
 # def merge_tn_imdb():
-    # """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
-    # # Initialize DataFrames
-    # imdb_movies_df = clean_imdb_title_basics(explode=True)
-    # tmdb_df = clean_tmdb_movies()
-    # tn_df = clean_tn_budgets()
-    #
-    # # Merge DataFrames
-    # combined = pd.merge(imdb_movies_df, tn_df, how='inner', left_on='cleaned_title', right_on='movie')
-    #
-    # simplified = combined[['genres', 'production_budget', 'domestic_gross', 'worldwide_gross']]
-    # eval_exp = '''
-    # international_gross = worldwide_gross - domestic_gross
-    # net_gain = worldwide_gross - production_budget
-    # '''
-    # simplified.eval(eval_exp, inplace=True)
-    # final_df = simplified.groupby('genres').mean() / 10 ** 6
-    # final_df.sort_values('net_gain', ascending=False, inplace=True)
-    # return final_df
-    # return eddies_function()
+# """Merge The Numbers and TMDB datasets and return a clean DataFrame"""
+# # Initialize DataFrames
+# imdb_movies_df = clean_imdb_title_basics(explode=True)
+# tmdb_df = clean_tmdb_movies()
+# tn_df = clean_tn_budgets()
+#
+# # Merge DataFrames
+# combined = pd.merge(imdb_movies_df, tn_df, how='inner', left_on='cleaned_title', right_on='movie')
+#
+# simplified = combined[['genres', 'production_budget', 'domestic_gross', 'worldwide_gross']]
+# eval_exp = '''
+# international_gross = worldwide_gross - domestic_gross
+# net_gain = worldwide_gross - production_budget
+# '''
+# simplified.eval(eval_exp, inplace=True)
+# final_df = simplified.groupby('genres').mean() / 10 ** 6
+# final_df.sort_values('net_gain', ascending=False, inplace=True)
+# return final_df
+# return eddies_function()
 
 
 """
+III.
+
 SINGLE FILE CLEANING FUNCTIONS
 These functions each clean one of the provided csv files, and one obtains genre ids from a .json file
 
