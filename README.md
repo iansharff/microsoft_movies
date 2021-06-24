@@ -6,7 +6,7 @@
 * [Programming Language and other tools](#programming-language-and-other-tools)
 * [Features](#features)
 * [Screenshots](#screenshots)
-* [Screenshots](#screenshots)
+
 
 ## General Information
 - Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
@@ -20,11 +20,12 @@
 - draw.io
 
 ## Features
-- Top movie geres based on user ratings.
-- Top movie geres based on domestic and foreign gross. 
-- Top directors based on movie genres. 
-- Show the most profitable genres.
-- Show the best motion picture content rating for each of the recommended genres.
+- Top movie geres based on user ratings
+- Top movie geres based on domestic and foreign gross
+- Top directors based on movie genres
+- Show the most profitable genres
+- Show the best motion picture content rating for each of the recommended genres
+- module set up for quick and clean processing through code
 
 ## Screenshots
 Schemas of the data used
