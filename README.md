@@ -75,7 +75,7 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 ```
 ├── README.md
 ├── __init__.py
-├── data
+├── data      <-- CSV and TSV files used in analyses
 │   ├── bom.movie_gross.csv
 │   ├── imdb.name.basics.csv
 │   ├── imdb.title.akas.csv
@@ -88,16 +88,16 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 │   ├── tmdb.movies.csv
 │   ├── tmdb_genre_ids.json
 │   └── tn.movie_budgets.csv
-├── images
+├── images      <-- Externally obtained and internally generated images
 ├── individuals
 │   ├── arthur
 │   ├── eddie
 │   ├── ian
 │   └── mia
-├── microsoft_motion_pictures.ipynb
-└── tools
-    ├── TN_File_Eddie.py
+├── microsoft_motion_pictures.ipynb     <-- Jupyter Notebook illustrating analysis
+└── tools     <-- module containing cleaning, merging, parsing, and support functions
+    ├── TN_File_Eddie.py  <-- contains function definition for IMDB + TN analysis
     ├── __init__.py
-    ├── data_preparation.py
-    └── tools_demo.ipynb
+    ├── data_preparation.py   <-- contains bulk of data_preparation functions
+    └── tools_demo.ipynb      <-- illustrative Jupyter Notebook showcasing module use
 ```
