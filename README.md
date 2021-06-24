@@ -7,8 +7,7 @@
 * [Analysis](#analysis)
 * [Programming Language and other tools](#programming-language-and-other-tools)
 * [Features](#features)
-* [Screenshots](#screenshots)
-
+* [Project_Structure](#project-structure)
 
 ## General Information
 - Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
@@ -21,6 +20,8 @@ Schemas of the data analyzed
 ![Schemas](./images/Project_Hollywood_Schemas_v2.png)
 
 The IMDb schemas were connected by tconst and nconst. While the other data were connected by title, to avoid any conflits with the title names our team decided to create a new index which removed all spaces and punctuation as well as making all text the same to ensure that no values are missing.
+
+
 
 ## Analysis
 Two seperate analysis was done to confirm which genres were the best. The first analysis compared the IMDb database with the BOM database to see which genres were the most popular based upon the number of of votes. We made an assumption that all people have the same probabilty to vote online in a given database which means that the more vote is present, the more popular a specific movie genre  will be.
@@ -37,12 +38,11 @@ With a clear set of genres in mind, a backbone to any good movie is having a goo
 
 insert figure here
   
-In the figure ablove, the top movies are X , Y, and Z where the directors are xx, yy, zz respectively.
+In the figure ablove, the top movies are Advengers:Endgame , Mad Max: Fury Road, and Z where the directors are the Russo Brothers, George Miller, zz respectively.
     
 Wth a good diretor supporting the movie production, we also need to figure out who our target audience will be. Taking a look at the Rotten Tomatoes database and our primary genres of focus, we see that nearly all the primary categories have a good rating among the General audience (G). While the total numbers of reviews in the G category is lower in most cases, we can also assume that there are far fewer kids who would be writing reviews online for these movies. Also with a general rating, this rating is suitable for more people thus increase the chances of more views and be more profitable.
 
 ![graph of_rating](./images/ian2.png)
-
 
 
 ## Programming Language and other tools
@@ -57,12 +57,6 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 - Show the most profitable genres
 - Show the best motion picture content rating for each of the recommended genres
 - module set up for quick and clean processing through code
-
-## Screenshots
-
-
-The following graph shows the the popular genres with the worldwide gross
-![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
 
 ## Team
 - Mia Fryer <br>
