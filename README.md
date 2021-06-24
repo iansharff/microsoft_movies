@@ -1,9 +1,9 @@
 # Project Hollywood
->This repository is our first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This project will use all but one (tmdb) of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explanation on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.
+>This repository is our first project using data to extrapolate actionable insights on the movie industry by using our combined knowledge to clean and manipulate data from a given set of data. This project will use all of the data sets provided to give a detailed insight on what the best option for a company trying to enter the movie industry. This repo will give an explanation on how each dataset was cleaned to provide the final recommendations along with graphs for better undestanding.
 
 ## Table of Contents
 * [General Info](#general-information)
-* [Technologies Used](#technologies-used)
+* [Programming Language and other tools](#programming-language-and-other-tools)
 * [Features](#features)
 * [Screenshots](#screenshots)
 
@@ -20,13 +20,16 @@
 - draw.io
 
 ## Features
-- Top movie geres based on user ratings.
-- Top movie geres based on domestic and foreign gross. 
-- Top directors based on movie genres. 
-- Show the most profitable genres.
-- Show the best motion picture content rating for each of the recommended genres.
+- Top movie geres based on user ratings
+- Top movie geres based on domestic and foreign gross
+- Top directors based on movie genres
+- Show the most profitable genres
+- Show the best motion picture content rating for each of the recommended genres
+- module set up for quick and clean processing through code
 
 ## Screenshots
+Schemas of the data used
+![Schemas](./images/Project_Hollywood_Schemas_v2.png)
 
 The following graph shows the the popular genres with the worldwide gross
 ![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
