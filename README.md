@@ -3,6 +3,8 @@
 
 ## Table of Contents
 * [General Info](#general-information)
+* [Database](#database)
+* [Analysis](#analysis)
 * [Programming Language and other tools](#programming-language-and-other-tools)
 * [Features](#features)
 * [Screenshots](#screenshots)
@@ -12,7 +14,20 @@
 - Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
 - The theoretical client has created a new studio and wants to develop original video content. <br>
 - In order for the client to successfully compete with its competitors, the client tasked our team to determine three recommendations on what type of films they should create.
+- 
+## Database
 
+Schemas of the data analyzed
+![Schemas](./images/Project_Hollywood_Schemas_v2.png)
+
+The IMDb schemas were connected by tconst and nconst. While the other data were connected by title, to avoid any conflits with the title names our team decided to create a new index which removed all spaces and punctuation as well as making all text the same to ensure that no values are missing.
+
+## Analysis
+Two seperate analysis was done to confirm which genres were the best. The first analysis compared the IMDb database with the BOM database to see which genres were the most popular based upon the number of of votes. We made an assumption that all people have the same probabilty to vote online in a given database which means that the more vote is present, the more popular a specific movie will be.
+
+With that in mind, we merged all the imdb database to analze and combned that with the BOM database. This provides the overall gross for each film. Just from these two database, we found that certain genres were more popular than others and managed to pull in more revenue.
+
+To doublecheck this result and to analyze the production budget, the IMDb database was compared to the TN database. This data came to a similar conclusion where the most popular 
 
 ## Programming Language and other tools
 - Python 
@@ -28,8 +43,7 @@
 - module set up for quick and clean processing through code
 
 ## Screenshots
-Schemas of the data used
-![Schemas](./images/Project_Hollywood_Schemas_v2.png)
+
 
 The following graph shows the the popular genres with the worldwide gross
 ![highest_gross_revenue_plot](./images/highest_gross_revenue_plot.png)
