@@ -71,8 +71,9 @@ def eddies_function():
     ww_earn_split = single_category_budget_df.groupby('genres')[
         ['domestic_earnings_millions', 'international_earnings_millions']].mean().sort_values(
         by='domestic_earnings_millions', ascending=False).head(10)
-    ww_earn_split.plot(kind='bar', stacked=True, xlabel='genres', ylabel='Earnings\n(Millions)', rot=45,
-                       title="Domestic and International Earnings");
+
+    # ww_earn_split.plot(kind='bar', stacked=True, xlabel='genres', ylabel='Earnings\n(Millions)', rot=45,
+    #                    title="Domestic and International Earnings");
 
     # creates seperate data with only the higest earning genres worldwide
     top_10_cat = single_category_budget_df.groupby('genres')['earnings_in_millions'].mean().sort_values(
