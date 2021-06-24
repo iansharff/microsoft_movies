@@ -183,10 +183,11 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
     name_basics_df = clean_imdb_name_basics()
 
     # Filter genres not in the top four, determined from other data
-    filtered_title_basics = title_basics_df[(title_basics_df['genres'] == 'Drama') |
+    filtered_title_basics = title_basics_df[(title_basics_df['genres'] == 'Sci-Fi') |
                                             (title_basics_df['genres'] == 'Action') |
                                             (title_basics_df['genres'] == 'Adventure') |
-                                            (title_basics_df['genres'] == 'Comedy')]
+                                            (title_basics_df['genres'] == 'Fantasy') |
+                                            (title_basics_df['genres'] == 'Animation')]
     # Combine the four DataFrames by inner merge
     combined = pd.merge(filtered_title_basics, ratings_df, how='inner', on='tconst')
     combined = pd.merge(combined, principals_df, how='inner', on='tconst')
@@ -200,10 +201,10 @@ def merge_imdb_top_crew(select_genre=None, select_role=None):
                         (combined['category'] == 'writer')]
 
     # Keep rows where the number of votes is higher than the average
-    final_df = combined[combined['numvotes'] > combined['numvotes'].mean()]
+    final_df = combined[combined['numvotes'] > 100000]
 
     if select_genre:
-        final_df = combined[combined['genres'] == select_genre]
+        final_df = final_df[final_df['genres'] == select_genre]
         if select_role:
             final_df = final_df[final_df['category'] == select_role]
 
