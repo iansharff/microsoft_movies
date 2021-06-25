@@ -446,7 +446,7 @@ def dollars_to_num(val):
 
 
 def remove_punctuation(text):
-    """Remove punctuation from a string"""
+    """Remove punctuation from a string and make lowercase"""
     for char in string.punctuation:
         text = text.replace(char, '')
     return text.strip().lower().replace(' ', '')

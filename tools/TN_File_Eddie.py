@@ -1,5 +1,5 @@
-
 import pandas as pd
+from tools.data_preparation import remove_punctuation
 
 
 def eddies_function():
@@ -9,8 +9,8 @@ def eddies_function():
     akas_df = pd.read_csv('./data/imdb.title.akas.csv')
     basics_df = pd.read_csv('./data/imdb.title.basics.csv')
 
-    tndb_df["Mov_name"] = tndb_df['movie'].str.lower().str.replace('[ \'\:\,\.]', '').astype(str)
-    tn_mov_df["Mov_name"] = tn_mov_df['title'].str.lower().str.replace('[ \'\:\,\.]', '').astype(str)
+    tndb_df["Mov_name"] = tndb_df['movie'].map(remove_punctuation)
+    tn_mov_df["Mov_name"] = tn_mov_df['title'].map(remove_punctuation)
 
     # creates new column with only the release year of the movie
     tn_mov_df['release_year'] = tn_mov_df['release_date'].astype(str).str[:4]
@@ -22,7 +22,7 @@ def eddies_function():
     tn_df = tn_mov_df.merge(tndb_df, on='Mov_name', how='inner')
 
     # created new column with movie names stripped
-    imdb_df['Mov_name'] = imdb_df['primary_title'].str.lower().str.replace('[ \'\:\,\.]', '').astype(str)
+    imdb_df['Mov_name'] = imdb_df['primary_title'].map(remove_punctuation)
 
     # create a new colum to include name and year of release
     imdb_df['name_year'] = imdb_df['Mov_name'] + imdb_df['start_year'].astype(str)
@@ -32,12 +32,11 @@ def eddies_function():
     budget_df = tn_df.merge(imdb_df, on='name_year', how='inner')
 
     # created two new columns to convert money strings to ints without punctuations
-    budget_df["domestic_gross_$"] = budget_df['domestic_gross'].str.lower().str.replace('[ \'\:\,\.\$]', '').astype(int)
-    budget_df["worldwide_gross_$"] = budget_df['worldwide_gross'].str.lower().str.replace('[ \'\:\,\.\$]', '').astype(
-        int)
+    budget_df["domestic_gross_$"] = budget_df['domestic_gross'].map(remove_punctuation).astype(int)
+    budget_df["worldwide_gross_$"] = budget_df['worldwide_gross'].map(remove_punctuation).astype(int)
 
     # new column converting production budget into a usable format
-    budget_df["production_$"] = budget_df['production_budget'].str.lower().str.replace('[ \'\:\,\.\$]', '').astype(int)
+    budget_df["production_$"] = budget_df['production_budget'].map(remove_punctuation).astype(int)
 
     # new column with the sum of the gross
     budget_df['international_gross'] = budget_df["worldwide_gross_$"] - budget_df["domestic_gross_$"]
@@ -67,13 +66,6 @@ def eddies_function():
     single_category_budget_df['domestic_earnings_millions'] = single_category_budget_df['domestic_gross_$'] / 1000000
     single_category_budget_df['international_earnings_millions'] = single_category_budget_df[
                                                                        'international_gross'] / 1000000
-
-    ww_earn_split = single_category_budget_df.groupby('genres')[
-        ['domestic_earnings_millions', 'international_earnings_millions']].mean().sort_values(
-        by='domestic_earnings_millions', ascending=False).head(10)
-
-    # ww_earn_split.plot(kind='bar', stacked=True, xlabel='genres', ylabel='Earnings\n(Millions)', rot=45,
-    #                    title="Domestic and International Earnings");
 
     # creates seperate data with only the higest earning genres worldwide
     top_10_cat = single_category_budget_df.groupby('genres')['earnings_in_millions'].mean().sort_values(
