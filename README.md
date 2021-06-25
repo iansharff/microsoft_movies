@@ -39,7 +39,7 @@ One thing to note here is that a movie with a musical genre is shown as one of t
 
 With a clear set of genres in mind, a backbone to any good movie is having a good director leading the charge. By confirming the genres with two seperate database. If we assume that a popular movie will be able to make the best return, we can find the most popular movie and figure out who the best directors are.
 
-i![graph of_cerw](./images/crew.png)
+![graph of_cerw](./images/crew.png)
   
 In the figure ablove, the top movies are Advengers:Endgame , Mad Max: Fury Road, and Deadpool where the directors are the Russo Brothers, George Miller, Tim Miller respectively.
     
