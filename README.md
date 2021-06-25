@@ -1,27 +1,30 @@
 # Microsoft Motion Pictures
->This repository is our analysis on several movie databases to find trends within and to propose recommendations to Microsoft who wants to enter the movie making industry. This repo will give an explination on the assumptions and analysis that was done to reach our final conclusions and recommendations.
->
->
+
+
+> This repository contains our exploratory analysis on files obtained from several movie databases. Our objective in this study is to make actionable recommendations for Microsoft who (hypothetically) wants to enter the movie making industry. In this document, we outline our methodology, our assumptions, and the models constructed which led us to our final conclusions and recommendations.
+
 ## Table of Contents
 * [General Info](#general-information)
-* [Database](#database)
+* [Data](#data-sources-and-understanding)
 * [Analysis](#analysis)
 * [Programming Language and other tools](#programming-language-and-other-tools)
 * [Features](#features)
 * [Project_Structure](#project-structure)
 
-## General Information
-- Exploring data from Box Office Mojo, IMDb, Rotten Tomatoes, The Numbers DB to extrapolate actionable insights on the types of genres that are doing the best at the box office.
-- The theoretical client has created a new studio and wants to develop original video content. <br>
-- In order for the client to successfully compete with its competitors, the client tasked our team to determine three recommendations on what type of films they should create.
+## Repository Links
+* [Tools package](/tools)
 
-## Database
+## General Information
+- Our available data is sourced from _Box Office Mojo_, _IMDb_, _Rotten Tomatoes_, and _The Numbers Database_ in the form of CSV files. From these sources we extract actionable insights on the types of genres that are doing the best at the box office.
+- The client is seeking to establish a movie production studio and wants to develop original video content.
+- In order for the client to successfully compete with its competitors, the client has tasked our team with determining three recommendations on what type of films they should create.
+
+## Data Sources and Understanding
 
 Schemas of the data analyzed
 ![Schemas](./images/Project_Hollywood_Schemas_v2.png)
 
-The IMDb schemas were connected by tconst and nconst. While the other data were connected by title, to avoid any conflits with the title names our team decided to create a new index which removed all spaces and punctuation as well as making all text the same to ensure that no values are missing.
-
+Above we have a relational schema for our datasets. The IMDb schemas were connected by "tconst" and "nconst" keys. For the other tables we resorted to title matching. In order to avoid naming conflicts, we decided to create a new index which removed all white space and non-alphanumeric characters.
 
 
 ## Analysis
@@ -95,6 +98,7 @@ Wth a good diretor supporting the movie production, we also need to figure out w
 │   ├── ian
 │   └── mia
 ├── microsoft_motion_pictures.ipynb     <-- Jupyter Notebook illustrating analysis
+├── microsof_motion_pictures_slides.pdf   <-- Presentation slides
 └── tools     <-- Module containing cleaning, merging, parsing, and support functions
     ├── TN_File_Eddie.py  <-- Contains function definition for IMDB + TN analysis
     ├── __init__.py
