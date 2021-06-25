@@ -48,7 +48,7 @@ With a clear set of genres in mind, we decided that the backbone to any good mov
   
 In the figure ablove, the top movies are Advengers: Endgame , Mad Max: Fury Road, and Deadpool where the directors are the Russo Brothers, George Miller, Tim Miller respectively.
     
-Wth a good diretor supporting the movie production, we also needed to determine our target audience. Taking a look at the Rotten Tomatoes database and our primary genres of focus, we see that nearly all the primary categories have a good rating among the General audience (G). While the total numbers of reviews in the G category is lower in most cases, we can also assume that there are far fewer kids who would be writing reviews online for these movies. Also with a general rating, this rating is suitable for more people thus increase the chances of more views and be more profitable.
+Wth a good diretor supporting the movie production, we also needed to determine our target audience. Taking a look at the Rotten Tomatoes database and our primary genres of focus, we see that nearly all the primary categories have a good rating among the General audience (G). Moreover, G-rated films are suitable for a wider audience, which intuitively might correspond to a broader appeal in the market.
 
 ![graph of_rating](./images/ian.png)
 
@@ -81,18 +81,6 @@ Wth a good diretor supporting the movie production, we also needed to determine 
 ├── README.md
 ├── __init__.py
 ├── data      <-- CSV and TSV files used in analyses
-│   ├── bom.movie_gross.csv
-│   ├── imdb.name.basics.csv
-│   ├── imdb.title.akas.csv
-│   ├── imdb.title.basics.csv
-│   ├── imdb.title.crew.csv
-│   ├── imdb.title.principals.csv
-│   ├── imdb.title.ratings.csv
-│   ├── rt.movie_info.tsv
-│   ├── rt.reviews.tsv
-│   ├── tmdb.movies.csv
-│   ├── tmdb_genre_ids.json
-│   └── tn.movie_budgets.csv
 ├── images      <-- Externally obtained and internally generated images
 ├── individuals     <--- Directory for individual workspaces
 │   ├── arthur
