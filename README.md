@@ -14,10 +14,11 @@
 ## Repository Links
 * [Tools package](/tools)
 
-## General Information
-- Our available data is sourced from _Box Office Mojo_, _IMDb_, _Rotten Tomatoes_, and _The Numbers Database_ in the form of CSV files. From these sources we extract actionable insights on the types of genres that are doing the best at the box office.
-- The client is seeking to establish a movie production studio and wants to develop original video content.
-- In order for the client to successfully compete with its competitors, the client has tasked our team with determining three recommendations on what type of films they should create.
+## Overview
+This project analyzes the best type of films to develop for the client. The analyses of film data from various sources (IMDb, Rotten Tomatoes, etc.) show that certain film types are recieved better by the general population. The client can use this analysis to select the best genres, directors, and film rating to improve the sucess of a new movie.
+
+## Business Problem
+The client is seeking to establish a movie production studio and wants to develop original video content.In order for the client to successfully compete with its competitors, the client has tasked our team with determining three recommendations on what type of films they should create.
 
 ## Data Sources and Understanding
 
