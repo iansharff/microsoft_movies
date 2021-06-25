@@ -8,9 +8,9 @@
 * [Business Problem](#business-problem)
 * [Data](#data-sources-and-understanding)
 * [Analysis](#analysis)
-* [Programming Language and other tools](#programming-language-and-other-tools)
+* [Programming Language and Other Tools](#programming-language-and-other-tools)
 * [Features](#features)
-* [Project_Structure](#project-structure)
+* [Project Structure](#project-structure)
 
 ## Repository Links
 * [Tools package](/tools)
