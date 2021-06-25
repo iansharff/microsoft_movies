@@ -4,7 +4,8 @@
 > This repository contains our exploratory analysis on files obtained from several movie databases. Our objective in this study is to make actionable recommendations for Microsoft who (hypothetically) wants to enter the movie making industry. In this document, we outline our methodology, our assumptions, and the models constructed which led us to our final conclusions and recommendations.
 
 ## Table of Contents
-* [General Info](#general-information)
+* [Overview](#overview)
+* [Business Problem](#business-problem)
 * [Data](#data-sources-and-understanding)
 * [Analysis](#analysis)
 * [Programming Language and other tools](#programming-language-and-other-tools)
