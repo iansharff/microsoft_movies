@@ -4,3 +4,6 @@
 # Pycharm
 .idea/
 __pycache__/
+
+# Finder 
+.DS_Store
